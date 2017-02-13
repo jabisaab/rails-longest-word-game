@@ -13,6 +13,22 @@ class WordsController < ApplicationController
    @start_time = Time.parse(params[:start_time])
    @end_time = Time.now
    @result = run_game(@attempt, params[:grid],@start_time, @end_time)
+
+   session[:counter] = session[:counter] || 0
+   session[:counter] = session[:counter] + 1
+
+   session[:total_time] = session[:total_time] || 0.0
+   session[:total_time] = session[:total_time] + @result[:time]
+
+   session[:average_score] = session[:average_score] || 0
+   session[:average_score] = (@result[:score] + session[:average_score])/session[:counter]
+ end
+
+ def reset
+  session[:counter] = nil
+  session[:total_time] = nil
+  session[:average_score]= nil
+  redirect_to game_path
  end
 
  def generate_grid(grid_size)
@@ -47,7 +63,7 @@ def run_game(attempt, grid, start_time, end_time)
     result = {
       time: end_time - start_time,
       translation: get_translation(attempt),
-      score: attempt.length - (end_time - start_time),
+      score: attempt.length * (end_time - start_time),
       message: "well done"
     }
   elsif check_grid(attempt, grid)

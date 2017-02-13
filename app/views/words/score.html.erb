@@ -8,5 +8,12 @@
 <%="Score = #{@result[:score]}"%>
 <br>
 <%="Message = #{@result[:message]}"%>
+<br>
+<br>
+<br>
+<%="count :#{session[:counter]}"%>
+<%="total time :#{session[:total_time] }"%>
+<%="average score :#{session[:average_score] }"%>
 
 
+<%= link_to "RESET", reset_path %>
